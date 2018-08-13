@@ -1,12 +1,18 @@
 package com.edu.epn.jisicv01;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
 
 /**
@@ -26,6 +32,8 @@ public class perfil extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private Button updateData;
+    private Button acerca;
 
     private OnFragmentInteractionListener mListener;
 
@@ -63,8 +71,56 @@ public class perfil extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_perfil, container, false);
+        View view = inflater.inflate(R.layout.fragment_perfil, container, false);
+        updateData = view.findViewById(R.id.btnActualizarDatos);
+        updateData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogo();
+            }
+        });
+
+        acerca = view.findViewById(R.id.btnAcerca);
+        acerca.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(),Acerca.class);
+                startActivity(intent);
+            }
+        });
+
+
+        return view;
+    }
+
+    public void dialogo(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = this.getLayoutInflater();
+        builder.setView(inflater.inflate(R.layout.dialogo_salida,null));
+        builder.setTitle("Seguro ?");
+        builder.setMessage("Desea continuar...");
+        builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getContext(),"diste si",Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getContext(),ActualizarDatos.class);
+                startActivity(intent);
+
+            }
+        });
+
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getContext(),"diste ni",Toast.LENGTH_LONG).show();
+            }
+        });
+
+
+        builder.setCancelable(true);
+        builder.create();
+        builder.show();
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event

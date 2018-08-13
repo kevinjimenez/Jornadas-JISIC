@@ -22,7 +22,18 @@
         <activity
             android:name=".Ingresado"
             android:label="@string/title_activity_ingresado"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ActualizarDatos" />
+        <activity android:name=".Acerca">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Ingresado" />
+        </activity>
+        <activity android:name=".DescripcionEvento">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Ingresado" />
+        </activity>
     </application>
 
 </manifest>
