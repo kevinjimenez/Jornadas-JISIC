@@ -1,5 +1,6 @@
 package com.edu.epn.jisicv01;
 
+import android.graphics.Bitmap;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -11,6 +12,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,9 +21,19 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
+
 public class Ingresado extends AppCompatActivity {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
+    String email,password;
+//    String email = getIntent().getExtras().getString("email");
+//    String password=getIntent().getExtras().getString("password");
+
 
 
     private ViewPager mViewPager;
@@ -40,7 +52,11 @@ public class Ingresado extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-
+        email = getIntent().getExtras().getString("email");
+        password=getIntent().getExtras().getString("password");
+        Log.e("TAG","DSFSDFS");
+        Log.e("TAG",email);
+        Log.e("TAG",password);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
@@ -48,6 +64,9 @@ public class Ingresado extends AppCompatActivity {
 
 
 
+    }
+    public String BusquedaUsuario(String email){
+        return email;
     }
 
 
@@ -72,6 +91,7 @@ public class Ingresado extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 
     /**
      * A placeholder fragment containing a simple view.
@@ -123,9 +143,10 @@ public class Ingresado extends AppCompatActivity {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
             //return PlaceholderFragment.newInstance(position + 1);
+            Log.e("TAG:",BusquedaUsuario(email));
             switch (position){
                 case 0: return perfil.newInstance("","");
-                case 1: return ticket.newInstance("","");
+                case 1: return ticket.newInstance(email,"");
                 case 2: return eventos.newInstance("","");
                 default: return null;
             }

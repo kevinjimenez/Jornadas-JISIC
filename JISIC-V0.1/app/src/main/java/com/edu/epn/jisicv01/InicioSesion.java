@@ -5,10 +5,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
 
 /**
@@ -30,6 +32,8 @@ public class InicioSesion extends Fragment {
     private String mParam2;
 
     private Button ingreso;
+    EditText inputEmail,inputPassword;
+
 
     private OnFragmentInteractionListener mListener;
 
@@ -58,6 +62,7 @@ public class InicioSesion extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -68,11 +73,21 @@ public class InicioSesion extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_inicio_sesion, container, false);
+        /**********************************/
+        // obteniendo datos
+        inputEmail = view.findViewById(R.id.inputEmail);
+        inputPassword = view.findViewById(R.id.inputPassword);
+
         ingreso = view.findViewById(R.id.btnIngresar);
         ingreso.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(),Ingresado.class);
+                Log.e("TAG email:::::","1"+inputEmail.getText().toString());
+                Log.e("TAG pass:::::","2"+ inputPassword.getText().toString());
+
+                intent.putExtra("email",inputEmail.getText().toString());
+                intent.putExtra("password",inputPassword.getText().toString());
                 startActivity(intent);
             }
         });

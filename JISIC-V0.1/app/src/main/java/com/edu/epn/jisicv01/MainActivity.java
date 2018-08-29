@@ -115,7 +115,6 @@ public class MainActivity extends AppCompatActivity {
             switch (position){
                 case 0: return InicioSesion.newInstance("","");
                 case 1: return Publicidad.newInstance("","");
-//                case 2: return InicioSesion.newInstance("","");
                 default: return null;
 
             }
