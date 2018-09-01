@@ -11,21 +11,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link InicioSesion.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link InicioSesion#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class InicioSesion extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private GoogleApiClient googleApiClient;
+    Bundle mBundle = new Bundle();
+    int CODERC=9001;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -78,19 +79,32 @@ public class InicioSesion extends Fragment {
         inputEmail = view.findViewById(R.id.inputEmail);
         inputPassword = view.findViewById(R.id.inputPassword);
 
-        ingreso = view.findViewById(R.id.btnIngresar);
-        ingreso.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(),Ingresado.class);
-                Log.e("TAG email:::::","1"+inputEmail.getText().toString());
-                Log.e("TAG pass:::::","2"+ inputPassword.getText().toString());
 
-                intent.putExtra("email",inputEmail.getText().toString());
-                intent.putExtra("password",inputPassword.getText().toString());
-                startActivity(intent);
-            }
-        });
+            ingreso = view.findViewById(R.id.btnIngresar);
+            ingreso.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getContext(),Ingresado.class);
+                    if(inputEmail.getText().toString().isEmpty() && inputPassword.getText().toString().isEmpty()){
+                        Toast.makeText(getContext(),"falta",Toast.LENGTH_LONG).show();
+                    }else {
+                        Log.e("TAG email:::::", "1" + inputEmail.getText().toString());
+                        Log.e("TAG pass:::::", "2" + inputPassword.getText().toString());
+
+                        intent.putExtra("email", inputEmail.getText().toString());
+                        intent.putExtra("password", inputPassword.getText().toString());
+                        startActivity(intent);
+                    }
+                }
+            });
+            // logeo con google
+            SignInButton btnGoogle = view.findViewById(R.id.btnGoogle);
+            btnGoogle.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    logeoConGoogle();
+                }
+            });
         return view;
     }
 
@@ -122,4 +136,55 @@ public class InicioSesion extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+    public void logeoConGoogle(){
+        if (googleApiClient != null)
+            googleApiClient.disconnect();
+
+        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions
+                .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+        googleApiClient = new GoogleApiClient
+                .Builder(getContext())
+                .addApi(Auth.GOOGLE_SIGN_IN_API,googleSignInOptions)
+                .build();
+
+        Intent intentGoogle = Auth
+                .GoogleSignInApi
+                .getSignInIntent(googleApiClient);
+        // se usa el start activity for result
+        startActivityForResult(intentGoogle,CODERC);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CODERC) {
+            GoogleSignInResult result = Auth //resultado de la cesion
+                    .GoogleSignInApi
+                    .getSignInResultFromIntent(data);
+            if (result.isSuccess()){
+
+                GoogleSignInAccount acc=result.getSignInAccount();
+                String token = acc.getIdToken();
+                Log.e("correo",acc.getEmail());
+                Log.e("nombre",acc.getDisplayName());
+                Log.e("id",acc.getId());
+                Log.e("foto",acc.getPhotoUrl().toString());
+                if (token != null){
+                    Toast.makeText(getContext(),token,Toast.LENGTH_LONG).show();
+                }
+                // ingresadon ...
+                Intent intent = new Intent(getContext(),Ingresado.class);
+                intent.putExtra("email",acc.getEmail().toString());
+                intent.putExtra("password",acc.getId().toString());
+                intent.putExtra("imgGoogle",acc.getPhotoUrl().toString());
+                startActivity(intent);
+                Toast.makeText(getContext(),"Correcto",Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
 }

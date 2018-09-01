@@ -1,6 +1,8 @@
 package com.edu.epn.jisicv01;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -19,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.zxing.BarcodeFormat;
@@ -27,12 +30,13 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
+import java.io.InputStream;
+
 public class Ingresado extends AppCompatActivity {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
-    String email,password;
-//    String email = getIntent().getExtras().getString("email");
-//    String password=getIntent().getExtras().getString("password");
+    String email,password,imgGoogle;
+
 
 
 
@@ -45,15 +49,14 @@ public class Ingresado extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         email = getIntent().getExtras().getString("email");
-        password=getIntent().getExtras().getString("password");
+        password = getIntent().getExtras().getString("password");
+        imgGoogle = getIntent().getExtras().getString("imgGoogle");
         Log.e("TAG","DSFSDFS");
         Log.e("TAG",email);
         Log.e("TAG",password);
@@ -145,7 +148,7 @@ public class Ingresado extends AppCompatActivity {
             //return PlaceholderFragment.newInstance(position + 1);
             Log.e("TAG:",BusquedaUsuario(email));
             switch (position){
-                case 0: return perfil.newInstance("","");
+                case 0: return perfil.newInstance(imgGoogle,"");
                 case 1: return ticket.newInstance(email,"");
                 case 2: return eventos.newInstance("","");
                 default: return null;
@@ -158,4 +161,7 @@ public class Ingresado extends AppCompatActivity {
             return 3;
         }
     }
+
+
+
 }

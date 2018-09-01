@@ -3,6 +3,7 @@ package com.edu.epn.jisicv01;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -36,6 +37,7 @@ public class ticket extends Fragment {
     private String mParam1;
     private String mParam2;
     private ImageView QR;
+    private String datosDelCodigoQR;
 
     private OnFragmentInteractionListener mListener;
 
@@ -43,14 +45,6 @@ public class ticket extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ticket.
-     */
     // TODO: Rename and change types and number of parameters
     public static ticket newInstance(String param1, String param2) {
         ticket fragment = new ticket();
@@ -75,8 +69,9 @@ public class ticket extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_ticket, container, false);
+        datosDelCodigoQR = mParam1;
         QR = view.findViewById(R.id.ticketCode);
-        generarQR(mParam1,QR);
+        generarQR(datosDelCodigoQR,QR);
         return view;
     }
 
@@ -104,16 +99,6 @@ public class ticket extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
@@ -130,6 +115,6 @@ public class ticket extends Fragment {
         } catch (WriterException e) {
             e.printStackTrace();
         }
-//        return  bitmap;
     }
+
 }

@@ -33,7 +33,7 @@
         android:text="EMAIL"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtApellidos" />
+        app:layout_constraintTop_toBottomOf="@+id/txtNombres" />
 
     <TextView
         android:id="@+id/txtCelular"
@@ -79,30 +79,17 @@
 
     <TextView
         android:id="@+id/txtNombres"
-        android:layout_width="164dp"
-        android:layout_height="28dp"
+        android:layout_width="298dp"
+        android:layout_height="31dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="36dp"
-        android:text="NOMBRES"
+        android:text="NOMBRES Y APELLIDOS"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtTitulo" />
-
-    <TextView
-        android:id="@+id/txtApellidos"
-        android:layout_width="164dp"
-        android:layout_height="28dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:text="APELLIDOS"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtNombres" />
 
     <Button
         android:id="@+id/btnActualizarDatos"
