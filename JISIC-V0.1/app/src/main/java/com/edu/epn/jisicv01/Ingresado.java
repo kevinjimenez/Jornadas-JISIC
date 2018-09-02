@@ -1,5 +1,6 @@
 package com.edu.epn.jisicv01;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -23,7 +24,10 @@ import android.view.ViewGroup;
 
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.facebook.login.LoginManager;
+import com.google.android.gms.auth.api.Auth;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
@@ -56,8 +60,7 @@ public class Ingresado extends AppCompatActivity {
         mViewPager.setAdapter(mSectionsPagerAdapter);
         email = getIntent().getExtras().getString("email");
         password = getIntent().getExtras().getString("password");
-        imgGoogle = getIntent().getExtras().getString("imgGoogle");
-        Log.e("TAG","DSFSDFS");
+        imgGoogle = getIntent().getExtras().getString("imgPerfil");
         Log.e("TAG",email);
         Log.e("TAG",password);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
@@ -86,13 +89,26 @@ public class Ingresado extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        Log.e("sssssssssssss",item+"");
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()){
+            case R.id.itemSalir:
+                LoginManager.getInstance().logOut();
+                regresarAlInicio();
+                Toast.makeText(getApplicationContext(),"Opcion Ver",Toast.LENGTH_LONG).show();
+                return true;
+            default: return false;
         }
+        //noinspection SimplifiableIfStatement
 
-        return super.onOptionsItemSelected(item);
+
+//        return super.onOptionsItemSelected(item);
+    }
+
+    public void regresarAlInicio(){
+        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+        startActivity(intent);
+
     }
 
 
