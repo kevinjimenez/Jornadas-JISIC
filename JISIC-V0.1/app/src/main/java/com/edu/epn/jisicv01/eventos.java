@@ -36,15 +36,6 @@ public class eventos extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment eventos.
-     */
-    // TODO: Rename and change types and number of parameters
     public static eventos newInstance(String param1, String param2) {
         eventos fragment = new eventos();
         Bundle args = new Bundle();
@@ -76,6 +67,7 @@ public class eventos extends Fragment {
                 Toast.makeText(getContext(),"Seleccionado",Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getContext(),DescripcionEvento.class);
                 intent.putExtra("dato","evento "+(position+1));
+                intent.putExtra("imgPerfil",mParam1);
                 Log.e("v:","evento "+ (position+1));
                 startActivity(intent);
 //                Log.e("TAG::","hola");

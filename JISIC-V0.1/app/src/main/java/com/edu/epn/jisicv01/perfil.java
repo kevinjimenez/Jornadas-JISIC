@@ -111,6 +111,8 @@ public class perfil extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 Toast.makeText(getContext(),"diste si",Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(getContext(),ActualizarDatos.class);
+                intent.putExtra("imgPerfil",mParam1);
+                Log.e("3",mParam1);
                 startActivity(intent);
 
             }

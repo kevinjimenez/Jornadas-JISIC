@@ -29,15 +29,15 @@
 
         <activity android:name=".ActualizarDatos" />
         <activity android:name=".Acerca">
-            <meta-data
+            <!--meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Ingresado" />
+                android:value=".Ingresado" /-->
         </activity>
         <activity android:name=".DescripcionEvento">
 
-            <meta-data
+            <!--meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Ingresado" />
+                android:value=".Ingresado" /-->
         </activity>
     </application>
 

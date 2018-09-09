@@ -44,6 +44,7 @@ public class Ingresado extends AppCompatActivity {
 
 
 
+
     private ViewPager mViewPager;
 
     @Override
@@ -61,8 +62,8 @@ public class Ingresado extends AppCompatActivity {
         email = getIntent().getExtras().getString("email");
         password = getIntent().getExtras().getString("password");
         imgGoogle = getIntent().getExtras().getString("imgPerfil");
-        Log.e("TAG",email);
-        Log.e("TAG",password);
+        Log.e("TAG 1",email);
+        Log.e("TAG 1",password);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
@@ -85,9 +86,6 @@ public class Ingresado extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         Log.e("sssssssssssss",item+"");
 
@@ -159,14 +157,11 @@ public class Ingresado extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            //return PlaceholderFragment.newInstance(position + 1);
             Log.e("TAG:",BusquedaUsuario(email));
             switch (position){
                 case 0: return perfil.newInstance(imgGoogle,"");
                 case 1: return ticket.newInstance(email,"");
-                case 2: return eventos.newInstance("","");
+                case 2: return eventos.newInstance(imgGoogle,"");
                 default: return null;
             }
         }
