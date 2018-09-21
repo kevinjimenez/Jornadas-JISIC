@@ -37,10 +37,15 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
-
-
-
+import Modelos.usuario;
+import RequestYResponse.RequestInterfaceDeBusquedaUsuario;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class InicioSesion extends Fragment {
@@ -48,7 +53,9 @@ public class InicioSesion extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     private GoogleApiClient googleApiClient;
     private final int CODERC=9001;
-// FB
+    private String API_BASE_UR = "http://192.168.1.3:1337/";
+
+    // FB
     private LoginButton loginButton;
     private CallbackManager callbackManager;
     private AccessTokenTracker accessTokenTracker;
@@ -67,7 +74,6 @@ public class InicioSesion extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     public InicioSesion() {
-        // Required empty public constructor
     }
 
     public static InicioSesion newInstance(String param1, String param2) {
@@ -87,27 +93,6 @@ public class InicioSesion extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        // sha
-//        FacebookSdk.sdkInitialize(getContext());
-//
-//        try {
-//            PackageInfo info = getActivity().getPackageManager().getPackageInfo(
-//                    "com.edu.epn.jisicv01",
-//                    PackageManager.GET_SIGNATURES);
-//            Log.e("TAG",info.toString());
-//            for (Signature signature : info.signatures) {
-//                MessageDigest md = MessageDigest.getInstance("SHA");
-//                md.update(signature.toByteArray());
-//                Log.e("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-//            }
-//        } catch (PackageManager.NameNotFoundException e) {
-//            Log.e("TAG", e.toString());
-//        } catch (NoSuchAlgorithmException e) {
-//            Log.e("TAG", e.toString());
-//        }
-
-        // fin sha
-
     }
 
     @Override
@@ -140,12 +125,6 @@ public class InicioSesion extends Fragment {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Profile profile = Profile.getCurrentProfile();
-                //Toast.makeText(getActivity(), profile.getFirstName(), Toast.LENGTH_SHORT).show();
-                Log.e("nombre",profile.getFirstName());
-                Log.e("nombre",profile.getMiddleName());
-                Log.e("nombre",profile.getLastName());
-                Log.e("nombre",profile.getId().toString());
-                Log.e("nombre",profile.getProfilePictureUri(500,500).toString());
                 Toast.makeText(getActivity(), "Login successful", Toast.LENGTH_SHORT).show();
                 logeoConFB(profile);
             }
@@ -170,16 +149,60 @@ public class InicioSesion extends Fragment {
             ingreso.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(getContext(),Ingresado.class);
                     if(inputEmail.getText().toString().isEmpty() && inputPassword.getText().toString().isEmpty()){
                         Toast.makeText(getContext(),"falta",Toast.LENGTH_LONG).show();
                     }else {
                         Log.e("TAG email:::::", "1" + inputEmail.getText().toString());
                         Log.e("TAG pass:::::", "2" + inputPassword.getText().toString());
 
-                        intent.putExtra("email", inputEmail.getText().toString());
-                        intent.putExtra("password", inputPassword.getText().toString());
-                        startActivity(intent);
+
+
+
+                        Retrofit retrofits = new Retrofit
+                                .Builder()
+                                .baseUrl(API_BASE_UR)
+                                .addConverterFactory(GsonConverterFactory
+                                        .create())
+                                .build();
+
+                        RequestInterfaceDeBusquedaUsuario req = retrofits.create(RequestInterfaceDeBusquedaUsuario.class);
+                        String nombreCompleto[] = inputEmail.getText().toString().toLowerCase().split(" ");
+                        Call<List<usuario>> call = req.getUno(nombreCompleto[0]);
+                        call.enqueue(new Callback<List<usuario>>() {
+                            @Override
+                            public void onResponse(Call<List<usuario>> call, Response<List<usuario>> response) {
+                                Log.e(" mainAction", "  response "+ response.body().size());
+                                if (response.body().size()>0){
+                                    Log.e(" mainAction", "  response "+ response.body().get(0).getApellido_2());
+                                    Intent intent = new Intent(getContext(),Ingresado.class);
+                                    intent.putExtra("email",response.body().get(0).getNombre_1());
+                                    intent.putExtra("password",response.body().get(0).getPassword());
+                                    startActivity(intent);
+                                    Toast.makeText(getContext(),"Correcto",Toast.LENGTH_LONG).show();
+                                }
+                                else {
+                                    Toast.makeText(getContext(),"no existes",Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<List<usuario>> call, Throwable t) {
+                                Log.e(" mainAction", t.getMessage());
+                            }
+                        });
+
+
+
+
+
+
+
+
+
+
+
+
+
                     }
                 }
             });
@@ -274,17 +297,65 @@ public class InicioSesion extends Fragment {
         startActivityForResult(intentGoogle,CODERC);
     }
 
-    private void logeoConFB(Profile profile){
+    private void logeoConFB(final Profile profile){
         if(profile != null){
-            Intent intent = new Intent(getContext(),Ingresado.class);
-            //intent.putExtra("idUsuario", profile.getFirstName() + " " + profile.getLastName());
-            intent.putExtra("email", profile.getFirstName());
-            System.out.println(profile.getLinkUri().toString());
-            intent.putExtra("password", profile.getId().toString());
-            intent.putExtra("imgPerfil", profile.getProfilePictureUri(250,250).toString());
-            startActivity(intent);
+            Retrofit retrofits = new Retrofit
+                    .Builder()
+                    .baseUrl(API_BASE_UR)
+                    .addConverterFactory(GsonConverterFactory
+                            .create())
+                    .build();
+
+            RequestInterfaceDeBusquedaUsuario req = retrofits.create(RequestInterfaceDeBusquedaUsuario.class);
+            String nombreCompleto[] = profile.getFirstName().toLowerCase().split(" ");
+            Call<List<usuario>> call = req.getUno(nombreCompleto[0]);
+            call.enqueue(new Callback<List<usuario>>() {
+                @Override
+                public void onResponse(Call<List<usuario>> call, Response<List<usuario>> response) {
+                    if (response.body().size()>0){
+                        Log.e(" mainAction", "  response "+ response.body().get(0).getApellido_2());
+                        Intent intent = new Intent(getContext(),Ingresado.class);
+                        //intent.putExtra("idUsuario", profile.getFirstName() + " " + profile.getLastName());
+                        intent.putExtra("email", response.body().get(0).getNombre_1());
+                        intent.putExtra("password", response.body().get(0).getPassword());
+                        intent.putExtra("imgPerfil", profile.getProfilePictureUri(250,250).toString());
+                        startActivity(intent);
+                    }
+                    else {
+                        Toast.makeText(getContext(),"no existes",Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<usuario>> call, Throwable t) {
+                    Log.e(" mainAction", t.getMessage());
+                }
+            });
+
         }
     }
+
+
+    // sha
+//        FacebookSdk.sdkInitialize(getContext());
+//
+//        try {
+//            PackageInfo info = getActivity().getPackageManager().getPackageInfo(
+//                    "com.edu.epn.jisicv01",
+//                    PackageManager.GET_SIGNATURES);
+//            Log.e("TAG",info.toString());
+//            for (Signature signature : info.signatures) {
+//                MessageDigest md = MessageDigest.getInstance("SHA");
+//                md.update(signature.toByteArray());
+//                Log.e("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+//            }
+//        } catch (PackageManager.NameNotFoundException e) {
+//            Log.e("TAG", e.toString());
+//        } catch (NoSuchAlgorithmException e) {
+//            Log.e("TAG", e.toString());
+//        }
+
+    // fin sha
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -297,22 +368,55 @@ public class InicioSesion extends Fragment {
                         .getSignInResultFromIntent(data);
                 if (result.isSuccess()){
 
-                    GoogleSignInAccount acc=result.getSignInAccount();
+                    final GoogleSignInAccount acc=result.getSignInAccount();
                     String token = acc.getIdToken();
-                    Log.e("correo",acc.getEmail());
-                    Log.e("nombre",acc.getDisplayName());
-                    Log.e("id",acc.getId());
-                    Log.e("foto",acc.getPhotoUrl().toString());
+
+
+
+                    /*   buscar en el server   */
+
+
+                    Retrofit retrofits = new Retrofit
+                            .Builder()
+                            .baseUrl(API_BASE_UR)
+                            .addConverterFactory(GsonConverterFactory
+                                    .create())
+                            .build();
+
+                    RequestInterfaceDeBusquedaUsuario req = retrofits.create(RequestInterfaceDeBusquedaUsuario.class);
+                    String nombreCompleto[] = acc.getDisplayName().toLowerCase().split(" ");
+                    Call<List<usuario>> call = req.getUno(nombreCompleto[0]);
+                    call.enqueue(new Callback<List<usuario>>() {
+                        @Override
+                        public void onResponse(Call<List<usuario>> call, Response<List<usuario>> response) {
+                            Log.e(" mainAction", "  response "+ response.body().size());
+                            if (response.body().size()>0){
+                                Log.e(" mainAction", "  response "+ response.body().get(0).getApellido_2());
+                                Intent intent = new Intent(getContext(),Ingresado.class);
+                                intent.putExtra("email",response.body().get(0).getNombre_1());
+                                intent.putExtra("password",response.body().get(0).getPassword());
+                                intent.putExtra("imgPerfil",acc.getPhotoUrl().toString());
+                                startActivity(intent);
+                                Toast.makeText(getContext(),"Correcto",Toast.LENGTH_LONG).show();
+                            }
+                            else {
+                                Toast.makeText(getContext(),"no existes",Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<List<usuario>> call, Throwable t) {
+                            Log.e(" mainAction", t.getMessage());
+                        }
+                    });
+
+
+                    /* fin de buqueda*/
                     if (token != null){
                         Toast.makeText(getContext(),token,Toast.LENGTH_LONG).show();
                     }
-                    // ingresadon ...
-                    Intent intent = new Intent(getContext(),Ingresado.class);
-                    intent.putExtra("email",acc.getEmail().toString());
-                    intent.putExtra("password",acc.getId().toString());
-                    intent.putExtra("imgPerfil",acc.getPhotoUrl().toString());
-                    startActivity(intent);
-                    Toast.makeText(getContext(),"Correcto",Toast.LENGTH_LONG).show();
+
+
                 }
 
         }

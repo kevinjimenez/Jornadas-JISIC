@@ -35,11 +35,21 @@ import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import java.io.InputStream;
+import java.util.List;
+
+import Modelos.usuario;
+import RequestYResponse.RequestInterfaceDeBusquedaUsuario;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Ingresado extends AppCompatActivity {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     String email,password,imgGoogle;
+    private String API_BASE_UR = "http://192.168.1.3:1337/";
 
 
 
@@ -68,13 +78,43 @@ public class Ingresado extends AppCompatActivity {
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
+        BuscarUsuario(email.toLowerCase());
 
 
 
     }
-    public String BusquedaUsuario(String email){
-        return email;
+
+
+    public void BuscarUsuario(String nombres){
+
+        Retrofit retrofits = new Retrofit
+                .Builder()
+                .baseUrl(API_BASE_UR)
+                .addConverterFactory(GsonConverterFactory
+                        .create())
+                .build();
+
+        RequestInterfaceDeBusquedaUsuario req = retrofits.create(RequestInterfaceDeBusquedaUsuario.class);
+        String nombreCompleto[] = nombres.split(" ");
+        Call<List<usuario>> call = req.getUno(nombreCompleto[0]);
+        call.enqueue(new Callback<List<usuario>>() {
+            @Override
+            public void onResponse(Call<List<usuario>> call, Response<List<usuario>> response) {
+                if (response.body().size()>0){
+                    Log.e(" mainAction", "  response "+ response.body().get(0).getApellido_2());
+                }
+                else {
+                    Toast.makeText(getApplicationContext(),"no existes",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<usuario>> call, Throwable t) {
+                Log.e(" mainAction", t.getMessage());
+            }
+        });
     }
+
 
 
     @Override
@@ -145,10 +185,6 @@ public class Ingresado extends AppCompatActivity {
         }
     }
 
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {
@@ -157,7 +193,6 @@ public class Ingresado extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            Log.e("TAG:",BusquedaUsuario(email));
             switch (position){
                 case 0: return perfil.newInstance(imgGoogle,"");
                 case 1: return ticket.newInstance(email,"");
