@@ -1,12 +1,7 @@
 package com.edu.epn.jisicv01;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -22,23 +17,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.Auth;
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.MultiFormatWriter;
-import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
-import com.journeyapps.barcodescanner.BarcodeEncoder;
 
-import java.io.InputStream;
 import java.util.List;
 
 import Modelos.usuario;
-import RequestYResponse.RequestInterfaceDeBusquedaUsuario;
+import RequestYResponse.RequestInterface;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -48,78 +35,51 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class Ingresado extends AppCompatActivity {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
-    String email,password,imgGoogle;
-    private String API_BASE_UR = "http://192.168.1.3:1337/";
-
-
-
-
-
     private ViewPager mViewPager;
+    //servidor
+
+
+    private int id;
+    private String imgPerfil;
+    private usuario miUsuario = null;
+    private String cod;
+
+    public String getCod() {
+        return cod;
+    }
+
+    public void setCod(String cod) {
+        this.cod = cod;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ingresado);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-
-        // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        email = getIntent().getExtras().getString("email");
-        password = getIntent().getExtras().getString("password");
-        imgGoogle = getIntent().getExtras().getString("imgPerfil");
-        Log.e("TAG 1",email);
-        Log.e("TAG 1",password);
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 
+        // obtengo los datos
+        id = getIntent().getExtras().getInt("id");
+        miUsuario = (usuario) getIntent().getExtras().getSerializable("usuario");
+        imgPerfil = getIntent().getExtras().getString("imgPerfil");
+
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
-        BuscarUsuario(email.toLowerCase());
-
-
 
     }
 
 
-    public void BuscarUsuario(String nombres){
 
-        Retrofit retrofits = new Retrofit
-                .Builder()
-                .baseUrl(API_BASE_UR)
-                .addConverterFactory(GsonConverterFactory
-                        .create())
-                .build();
-
-        RequestInterfaceDeBusquedaUsuario req = retrofits.create(RequestInterfaceDeBusquedaUsuario.class);
-        String nombreCompleto[] = nombres.split(" ");
-        Call<List<usuario>> call = req.getUno(nombreCompleto[0]);
-        call.enqueue(new Callback<List<usuario>>() {
-            @Override
-            public void onResponse(Call<List<usuario>> call, Response<List<usuario>> response) {
-                if (response.body().size()>0){
-                    Log.e(" mainAction", "  response "+ response.body().get(0).getApellido_2());
-                }
-                else {
-                    Toast.makeText(getApplicationContext(),"no existes",Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<usuario>> call, Throwable t) {
-                Log.e(" mainAction", t.getMessage());
-            }
-        });
-    }
 
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_ingresado, menu);
         return true;
     }
@@ -128,7 +88,6 @@ public class Ingresado extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         Log.e("sssssssssssss",item+"");
-
         switch (item.getItemId()){
             case R.id.itemSalir:
                 LoginManager.getInstance().logOut();
@@ -137,10 +96,6 @@ public class Ingresado extends AppCompatActivity {
                 return true;
             default: return false;
         }
-        //noinspection SimplifiableIfStatement
-
-
-//        return super.onOptionsItemSelected(item);
     }
 
     public void regresarAlInicio(){
@@ -149,24 +104,13 @@ public class Ingresado extends AppCompatActivity {
 
     }
 
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
     public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
+
         private static final String ARG_SECTION_NUMBER = "section_number";
 
         public PlaceholderFragment() {
         }
 
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
         public static PlaceholderFragment newInstance(int sectionNumber) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
@@ -194,9 +138,9 @@ public class Ingresado extends AppCompatActivity {
         @Override
         public Fragment getItem(int position) {
             switch (position){
-                case 0: return perfil.newInstance(imgGoogle,"");
-                case 1: return ticket.newInstance(email,"");
-                case 2: return eventos.newInstance(imgGoogle,"");
+                case 0: return perfil.newInstance(imgPerfil,miUsuario);
+                case 1: return ticket.newInstance(miUsuario.getNumeroDeCedula(),"");
+                case 2: return eventos.newInstance(imgPerfil,"");
                 default: return null;
             }
         }
@@ -207,6 +151,8 @@ public class Ingresado extends AppCompatActivity {
             return 3;
         }
     }
+
+
 
 
 

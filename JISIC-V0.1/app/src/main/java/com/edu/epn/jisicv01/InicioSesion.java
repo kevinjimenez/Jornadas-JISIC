@@ -25,7 +25,6 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
-import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
@@ -40,7 +39,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import Modelos.usuario;
-import RequestYResponse.RequestInterfaceDeBusquedaUsuario;
+import RequestYResponse.DireccionHttpDelServidor;
+import RequestYResponse.RequestInterface;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -51,9 +51,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class InicioSesion extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private GoogleApiClient googleApiClient;
+    // servidor
+
+    // google
     private final int CODERC=9001;
-    private String API_BASE_UR = "http://192.168.1.3:1337/";
+    private GoogleApiClient googleApiClient;
+
 
     // FB
     private LoginButton loginButton;
@@ -61,9 +64,10 @@ public class InicioSesion extends Fragment {
     private AccessTokenTracker accessTokenTracker;
     private ProfileTracker profileTracker;
 
-    // TODO: Rename and change types of parameters
+
     private String mParam1;
     private String mParam2;
+
 
     private Button ingreso;
     EditText inputEmail,inputPassword;
@@ -93,18 +97,17 @@ public class InicioSesion extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        //shaDeFacebook();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_inicio_sesion, container, false);
-        /**********************************/
         callbackManager = CallbackManager.Factory.create();
         loginButton = (LoginButton) view.findViewById(R.id.btnFB);
         //loginButton.setReadPermissions("user_friends");
         loginButton.setFragment(this);
-
         accessTokenTracker = new AccessTokenTracker() {
             @Override
             protected void onCurrentAccessTokenChanged(AccessToken oldToken, AccessToken newToken) {
@@ -152,60 +155,11 @@ public class InicioSesion extends Fragment {
                     if(inputEmail.getText().toString().isEmpty() && inputPassword.getText().toString().isEmpty()){
                         Toast.makeText(getContext(),"falta",Toast.LENGTH_LONG).show();
                     }else {
-                        Log.e("TAG email:::::", "1" + inputEmail.getText().toString());
-                        Log.e("TAG pass:::::", "2" + inputPassword.getText().toString());
-
-
-
-
-                        Retrofit retrofits = new Retrofit
-                                .Builder()
-                                .baseUrl(API_BASE_UR)
-                                .addConverterFactory(GsonConverterFactory
-                                        .create())
-                                .build();
-
-                        RequestInterfaceDeBusquedaUsuario req = retrofits.create(RequestInterfaceDeBusquedaUsuario.class);
-                        String nombreCompleto[] = inputEmail.getText().toString().toLowerCase().split(" ");
-                        Call<List<usuario>> call = req.getUno(nombreCompleto[0]);
-                        call.enqueue(new Callback<List<usuario>>() {
-                            @Override
-                            public void onResponse(Call<List<usuario>> call, Response<List<usuario>> response) {
-                                Log.e(" mainAction", "  response "+ response.body().size());
-                                if (response.body().size()>0){
-                                    Log.e(" mainAction", "  response "+ response.body().get(0).getApellido_2());
-                                    Intent intent = new Intent(getContext(),Ingresado.class);
-                                    intent.putExtra("email",response.body().get(0).getNombre_1());
-                                    intent.putExtra("password",response.body().get(0).getPassword());
-                                    startActivity(intent);
-                                    Toast.makeText(getContext(),"Correcto",Toast.LENGTH_LONG).show();
-                                }
-                                else {
-                                    Toast.makeText(getContext(),"no existes",Toast.LENGTH_SHORT).show();
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<List<usuario>> call, Throwable t) {
-                                Log.e(" mainAction", t.getMessage());
-                            }
-                        });
-
-
-
-
-
-
-
-
-
-
-
-
-
+                        buscarUsuarioPorEmail(inputEmail.getText().toString(),inputPassword.getText().toString(),"");
                     }
                 }
             });
+
             // logeo con google
             SignInButton btnGoogle = view.findViewById(R.id.btnGoogle);
             btnGoogle.setOnClickListener(new View.OnClickListener() {
@@ -215,6 +169,82 @@ public class InicioSesion extends Fragment {
                 }
             });
         return view;
+    }
+
+
+    public void buscarUsuarioPorNombre(String nombreUsuario, final String urlImagen){
+        String nombreCompleto[] = new String[]{};
+
+        Retrofit retrofits = new Retrofit
+                .Builder()
+                .baseUrl(new DireccionHttpDelServidor().getAPI_BASE_URL())
+                .addConverterFactory(GsonConverterFactory
+                        .create())
+                .build();
+
+        RequestInterface req = retrofits.create(RequestInterface.class);
+        nombreCompleto = nombreUsuario.toLowerCase().split(" ");
+        Call<List<usuario>> call = req.getUsuarioPorNombre(nombreCompleto[0]);
+        call.enqueue(new Callback<List<usuario>>() {
+            @Override
+            public void onResponse(Call<List<usuario>> call, Response<List<usuario>> response) {
+                if (response.body().size()>0){
+                    Toast.makeText(getContext(),"Correcto",Toast.LENGTH_LONG).show();
+
+                    Intent intent = new Intent(getContext(),Ingresado.class);
+                    intent.putExtra("id",response.body().get(0).getId());
+                    intent.putExtra("usuario",(usuario)response.body().get(0));
+                    intent.putExtra("imgPerfil", urlImagen);
+//
+                    startActivity(intent);
+
+                }
+                else {
+                    Toast.makeText(getContext(),"no existes",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<usuario>> call, Throwable t) {
+                Log.e(" mainAction", t.getMessage());
+            }
+        });
+    }
+
+    public void buscarUsuarioPorEmail( final String email, final String password, final String urlImagen){
+        Retrofit retrofits = new Retrofit
+                .Builder()
+                .baseUrl(new DireccionHttpDelServidor().getAPI_BASE_URL())
+                .addConverterFactory(GsonConverterFactory
+                        .create())
+                .build();
+
+        RequestInterface req = retrofits.create(RequestInterface.class);
+        Call<List<usuario>> call = req.getUsuarioPorEmailYPassword(email,password);
+        call.enqueue(new Callback<List<usuario>>() {
+            @Override
+            public void onResponse(Call<List<usuario>> call, Response<List<usuario>> response) {
+                if (response.body().size()>0){
+                    Toast.makeText(getContext(),"Correcto",Toast.LENGTH_LONG).show();
+
+                    Intent intent = new Intent(getContext(),Ingresado.class);
+                    intent.putExtra("id",response.body().get(0).getId());
+                    intent.putExtra("usuario",(usuario)response.body().get(0));
+                    intent.putExtra("imgPerfil", urlImagen);
+//
+                    startActivity(intent);
+
+                }
+                else {
+                    Toast.makeText(getContext(),"no existes",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<usuario>> call, Throwable t) {
+                Log.e(" mainAction", t.getMessage());
+            }
+        });
     }
 
 
@@ -244,8 +274,7 @@ public class InicioSesion extends Fragment {
         profileTracker.stopTracking();
     }
 
-    ///////////////////// fin ffb
-
+    ///////////////////// fin fb
 
         // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -299,128 +328,57 @@ public class InicioSesion extends Fragment {
 
     private void logeoConFB(final Profile profile){
         if(profile != null){
-            Retrofit retrofits = new Retrofit
-                    .Builder()
-                    .baseUrl(API_BASE_UR)
-                    .addConverterFactory(GsonConverterFactory
-                            .create())
-                    .build();
-
-            RequestInterfaceDeBusquedaUsuario req = retrofits.create(RequestInterfaceDeBusquedaUsuario.class);
-            String nombreCompleto[] = profile.getFirstName().toLowerCase().split(" ");
-            Call<List<usuario>> call = req.getUno(nombreCompleto[0]);
-            call.enqueue(new Callback<List<usuario>>() {
-                @Override
-                public void onResponse(Call<List<usuario>> call, Response<List<usuario>> response) {
-                    if (response.body().size()>0){
-                        Log.e(" mainAction", "  response "+ response.body().get(0).getApellido_2());
-                        Intent intent = new Intent(getContext(),Ingresado.class);
-                        //intent.putExtra("idUsuario", profile.getFirstName() + " " + profile.getLastName());
-                        intent.putExtra("email", response.body().get(0).getNombre_1());
-                        intent.putExtra("password", response.body().get(0).getPassword());
-                        intent.putExtra("imgPerfil", profile.getProfilePictureUri(250,250).toString());
-                        startActivity(intent);
-                    }
-                    else {
-                        Toast.makeText(getContext(),"no existes",Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<List<usuario>> call, Throwable t) {
-                    Log.e(" mainAction", t.getMessage());
-                }
-            });
-
+            buscarUsuarioPorNombre(profile.getFirstName(),profile.getProfilePictureUri(250,250).toString());
         }
     }
 
 
     // sha
-//        FacebookSdk.sdkInitialize(getContext());
-//
-//        try {
-//            PackageInfo info = getActivity().getPackageManager().getPackageInfo(
-//                    "com.edu.epn.jisicv01",
-//                    PackageManager.GET_SIGNATURES);
-//            Log.e("TAG",info.toString());
-//            for (Signature signature : info.signatures) {
-//                MessageDigest md = MessageDigest.getInstance("SHA");
-//                md.update(signature.toByteArray());
-//                Log.e("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-//            }
-//        } catch (PackageManager.NameNotFoundException e) {
-//            Log.e("TAG", e.toString());
-//        } catch (NoSuchAlgorithmException e) {
-//            Log.e("TAG", e.toString());
-//        }
+
+    public void shaDeFacebook(){
+        FacebookSdk.sdkInitialize(getContext());
+
+        try {
+            PackageInfo info = getActivity().getPackageManager().getPackageInfo(
+                    "com.edu.epn.jisicv01",
+                    PackageManager.GET_SIGNATURES);
+            Log.e("TAG",info.toString());
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.e("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e("TAG", e.toString());
+        } catch (NoSuchAlgorithmException e) {
+            Log.e("TAG", e.toString());
+        }
+    }
 
     // fin sha
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-
             if (requestCode == CODERC) {
                 GoogleSignInResult result = Auth //resultado de la cesion
                         .GoogleSignInApi
                         .getSignInResultFromIntent(data);
                 if (result.isSuccess()){
-
                     final GoogleSignInAccount acc=result.getSignInAccount();
                     String token = acc.getIdToken();
-
+                    acc.getDisplayName();
 
 
                     /*   buscar en el server   */
-
-
-                    Retrofit retrofits = new Retrofit
-                            .Builder()
-                            .baseUrl(API_BASE_UR)
-                            .addConverterFactory(GsonConverterFactory
-                                    .create())
-                            .build();
-
-                    RequestInterfaceDeBusquedaUsuario req = retrofits.create(RequestInterfaceDeBusquedaUsuario.class);
-                    String nombreCompleto[] = acc.getDisplayName().toLowerCase().split(" ");
-                    Call<List<usuario>> call = req.getUno(nombreCompleto[0]);
-                    call.enqueue(new Callback<List<usuario>>() {
-                        @Override
-                        public void onResponse(Call<List<usuario>> call, Response<List<usuario>> response) {
-                            Log.e(" mainAction", "  response "+ response.body().size());
-                            if (response.body().size()>0){
-                                Log.e(" mainAction", "  response "+ response.body().get(0).getApellido_2());
-                                Intent intent = new Intent(getContext(),Ingresado.class);
-                                intent.putExtra("email",response.body().get(0).getNombre_1());
-                                intent.putExtra("password",response.body().get(0).getPassword());
-                                intent.putExtra("imgPerfil",acc.getPhotoUrl().toString());
-                                startActivity(intent);
-                                Toast.makeText(getContext(),"Correcto",Toast.LENGTH_LONG).show();
-                            }
-                            else {
-                                Toast.makeText(getContext(),"no existes",Toast.LENGTH_SHORT).show();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<List<usuario>> call, Throwable t) {
-                            Log.e(" mainAction", t.getMessage());
-                        }
-                    });
-
-
+                    buscarUsuarioPorNombre(acc.getDisplayName(),acc.getPhotoUrl().toString());
                     /* fin de buqueda*/
+
                     if (token != null){
                         Toast.makeText(getContext(),token,Toast.LENGTH_LONG).show();
                     }
-
-
                 }
-
         }
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
-
 }

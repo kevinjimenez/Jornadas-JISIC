@@ -17,51 +17,35 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.InputStream;
 
+import Modelos.usuario;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link perfil.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link perfil#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class perfil extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
-    private String mParam2;
+    private usuario mParam2;
+
+    private TextView nombres,email,celular,CI;
     private Button updateData;
     private Button acerca;
 
     private OnFragmentInteractionListener mListener;
 
-    public perfil() {
-        // Required empty public constructor
-    }
+    public perfil() {}
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment perfil.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static perfil newInstance(String param1, String param2) {
+    public static perfil newInstance(String param1, usuario param2) {
         perfil fragment = new perfil();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putSerializable(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -71,7 +55,7 @@ public class perfil extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mParam2 = (usuario) getArguments().getSerializable(ARG_PARAM2);
         }
     }
 
@@ -79,6 +63,18 @@ public class perfil extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_perfil, container, false);
+        nombres = view.findViewById(R.id.txtNombres);
+        nombres.setText(mParam2.getNombre_1()+" "+mParam2.getApellido_1());
+        email = view.findViewById(R.id.txtEmail);
+        email.setText(mParam2.getEmail());
+        celular = view.findViewById(R.id.txtCelular);
+        celular.setText(mParam2.getNumeroDeTelefono());
+        CI = view.findViewById(R.id.txtCedula);
+        CI.setText(mParam2.getNumeroDeCedula());
+
+
+
+
         updateData = view.findViewById(R.id.btnActualizarDatos);
         updateData.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,7 +128,6 @@ public class perfil extends Fragment {
 
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -144,10 +139,7 @@ public class perfil extends Fragment {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
-        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-        }
+        } else {}
     }
 
     @Override

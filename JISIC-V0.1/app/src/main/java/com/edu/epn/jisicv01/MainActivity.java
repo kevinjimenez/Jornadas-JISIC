@@ -113,8 +113,8 @@ public class MainActivity extends AppCompatActivity {
             // Return a PlaceholderFragment (defined as a static inner class below).
             //return PlaceholderFragment.newInstance(position + 1);
             switch (position){
-                case 0: return InicioSesion.newInstance("","");
-                case 1: return Publicidad.newInstance("","");
+                case 0: return Publicidad.newInstance("","");
+                case 1: return InicioSesion.newInstance("","");
                 default: return null;
 
             }
