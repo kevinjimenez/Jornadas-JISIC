@@ -1,7 +1,6 @@
 package com.edu.epn.jisicv01;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,8 +8,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
-import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.InputStream;
 
@@ -26,26 +22,24 @@ import Modelos.usuario;
 
 public class perfil extends Fragment {
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_PARAM1 = "imgPerfil";
+    private static final String ARG_PARAM2 = "miUsuario";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private usuario mParam2;
+    private String imgPerfil;
+    private usuario miUsuario;
 
     private TextView nombres,email,celular,CI;
-    private Button updateData;
     private Button acerca;
 
     private OnFragmentInteractionListener mListener;
 
     public perfil() {}
 
-    public static perfil newInstance(String param1, usuario param2) {
+    public static perfil newInstance(String imgPerfil, usuario miUsuario) {
         perfil fragment = new perfil();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putSerializable(ARG_PARAM2, param2);
+        args.putString(ARG_PARAM1, imgPerfil);
+        args.putSerializable(ARG_PARAM2, miUsuario);
         fragment.setArguments(args);
         return fragment;
     }
@@ -54,8 +48,8 @@ public class perfil extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = (usuario) getArguments().getSerializable(ARG_PARAM2);
+            imgPerfil = getArguments().getString(ARG_PARAM1);
+            miUsuario = (usuario) getArguments().getSerializable(ARG_PARAM2);
         }
     }
 
@@ -63,26 +57,17 @@ public class perfil extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_perfil, container, false);
+        // datos en los text view
         nombres = view.findViewById(R.id.txtNombres);
-        nombres.setText(mParam2.getNombre_1()+" "+mParam2.getApellido_1());
+        nombres.setText("Nombres y Apellidos: "+miUsuario.getNombre_1()+" "+ miUsuario.getApellido_1());
         email = view.findViewById(R.id.txtEmail);
-        email.setText(mParam2.getEmail());
+        email.setText("E-mail: "+miUsuario.getEmail());
         celular = view.findViewById(R.id.txtCelular);
-        celular.setText(mParam2.getNumeroDeTelefono());
+        celular.setText("Celular: "+miUsuario.getNumeroDeTelefono());
         CI = view.findViewById(R.id.txtCedula);
-        CI.setText(mParam2.getNumeroDeCedula());
+        CI.setText("CI: "+miUsuario.getNumeroDeCedula());
 
-
-
-
-        updateData = view.findViewById(R.id.btnActualizarDatos);
-        updateData.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogo();
-            }
-        });
-
+        // btn ACERCA
         acerca = view.findViewById(R.id.btnAcerca);
         acerca.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,42 +76,11 @@ public class perfil extends Fragment {
                 startActivity(intent);
             }
         });
-        new perfil.imagenPerfil((ImageView) view.findViewById(R.id.imageView)).execute(mParam1);
-
+        // seteo de la imagen de FB o Google
+        new perfil.imagenPerfil((ImageView) view.findViewById(R.id.imageView)).execute(imgPerfil);
         return view;
     }
 
-    public void dialogo(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        LayoutInflater inflater = this.getLayoutInflater();
-        builder.setView(inflater.inflate(R.layout.dialogo_salida,null));
-        builder.setTitle("Seguro ?");
-        builder.setMessage("Desea continuar...");
-        builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(getContext(),"diste si",Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(getContext(),ActualizarDatos.class);
-                intent.putExtra("imgPerfil",mParam1);
-                Log.e("3",mParam1);
-                startActivity(intent);
-
-            }
-        });
-
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(getContext(),"diste ni",Toast.LENGTH_LONG).show();
-            }
-        });
-
-
-        builder.setCancelable(true);
-        builder.create();
-        builder.show();
-
-    }
 
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -149,10 +103,9 @@ public class perfil extends Fragment {
     }
 
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-
+// tarea asincrona para cargar la imagen
     public static class imagenPerfil extends AsyncTask<String, Void, Bitmap> {
         ImageView urlImagen;
 

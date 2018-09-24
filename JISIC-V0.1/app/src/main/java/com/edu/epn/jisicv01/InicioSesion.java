@@ -128,7 +128,7 @@ public class InicioSesion extends Fragment {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Profile profile = Profile.getCurrentProfile();
-                Toast.makeText(getActivity(), "Login successful", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "Login successful", Toast.LENGTH_SHORT).show();
                 logeoConFB(profile);
             }
 
@@ -139,7 +139,8 @@ public class InicioSesion extends Fragment {
 
             @Override
             public void onError(FacebookException exception) {
-                Toast.makeText(getActivity(), "Login error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Error al logearse con facebook"+exception.toString(), Toast.LENGTH_SHORT).show();
+
             }
         });
 
@@ -153,7 +154,7 @@ public class InicioSesion extends Fragment {
                 @Override
                 public void onClick(View v) {
                     if(inputEmail.getText().toString().isEmpty() && inputPassword.getText().toString().isEmpty()){
-                        Toast.makeText(getContext(),"falta",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(),"Debes llenar los Campos",Toast.LENGTH_LONG).show();
                     }else {
                         buscarUsuarioPorEmail(inputEmail.getText().toString(),inputPassword.getText().toString(),"");
                     }
@@ -189,18 +190,15 @@ public class InicioSesion extends Fragment {
             @Override
             public void onResponse(Call<List<usuario>> call, Response<List<usuario>> response) {
                 if (response.body().size()>0){
-                    Toast.makeText(getContext(),"Correcto",Toast.LENGTH_LONG).show();
 
                     Intent intent = new Intent(getContext(),Ingresado.class);
-                    intent.putExtra("id",response.body().get(0).getId());
                     intent.putExtra("usuario",(usuario)response.body().get(0));
                     intent.putExtra("imgPerfil", urlImagen);
-//
+                    Toast.makeText(getContext(),"Bienvenido",Toast.LENGTH_LONG).show();
                     startActivity(intent);
-
                 }
                 else {
-                    Toast.makeText(getContext(),"no existes",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),"No te encuentras inspcrito",Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -225,18 +223,15 @@ public class InicioSesion extends Fragment {
             @Override
             public void onResponse(Call<List<usuario>> call, Response<List<usuario>> response) {
                 if (response.body().size()>0){
-                    Toast.makeText(getContext(),"Correcto",Toast.LENGTH_LONG).show();
-
                     Intent intent = new Intent(getContext(),Ingresado.class);
-                    intent.putExtra("id",response.body().get(0).getId());
                     intent.putExtra("usuario",(usuario)response.body().get(0));
                     intent.putExtra("imgPerfil", urlImagen);
-//
                     startActivity(intent);
+                    Toast.makeText(getContext(),"Bienvenido",Toast.LENGTH_LONG).show();
 
                 }
                 else {
-                    Toast.makeText(getContext(),"no existes",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),"No te encuentras inspcrito",Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -275,8 +270,6 @@ public class InicioSesion extends Fragment {
     }
 
     ///////////////////// fin fb
-
-        // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);

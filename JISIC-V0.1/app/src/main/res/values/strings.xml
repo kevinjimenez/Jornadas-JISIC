@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">JISIC V0.1</string>
+    <string name="app_name">JISIC</string>
     <string name="action_settings">Salir</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="facebook_app_id">240760179972018</string>

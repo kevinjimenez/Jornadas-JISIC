@@ -39,18 +39,9 @@ public class Ingresado extends AppCompatActivity {
     //servidor
 
 
-    private int id;
+    //private int id;
     private String imgPerfil;
     private usuario miUsuario = null;
-    private String cod;
-
-    public String getCod() {
-        return cod;
-    }
-
-    public void setCod(String cod) {
-        this.cod = cod;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,18 +54,14 @@ public class Ingresado extends AppCompatActivity {
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         // obtengo los datos
-        id = getIntent().getExtras().getInt("id");
+        //id = getIntent().getExtras().getInt("id");
         miUsuario = (usuario) getIntent().getExtras().getSerializable("usuario");
         imgPerfil = getIntent().getExtras().getString("imgPerfil");
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
-
     }
-
-
-
 
 
 
@@ -87,12 +74,11 @@ public class Ingresado extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        Log.e("sssssssssssss",item+"");
         switch (item.getItemId()){
             case R.id.itemSalir:
                 LoginManager.getInstance().logOut();
                 regresarAlInicio();
-                Toast.makeText(getApplicationContext(),"Opcion Ver",Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(),"",Toast.LENGTH_LONG).show();
                 return true;
             default: return false;
         }
