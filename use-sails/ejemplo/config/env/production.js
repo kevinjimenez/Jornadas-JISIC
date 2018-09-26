@@ -49,6 +49,8 @@ module.exports = {
     default: {
       // adapter: 'sails-mysql',
       // url: 'mysql://user:password@host:port/database',
+      adapter: require('sails-mysql'),
+      url: 'mysql://sql10258586:VMcc12a7Gk@sql10.freemysqlhosting.net:3306/sql10258586'
       //--------------------------------------------------------------------------
       //  /\   To avoid checking it in to version control, you might opt to set
       //  ||   sensitive credentials like `url` using an environment variable.
@@ -90,7 +92,7 @@ module.exports = {
     * https://sailsjs.com/docs/concepts/models-and-orm/model-settings#?migrate *
     *                                                                          *
     ***************************************************************************/
-    //migrate: 'safe',
+    migrate: 'safe',
 
     /***************************************************************************
     *                                                                          *
@@ -101,7 +103,7 @@ module.exports = {
     * choose to keep this enabled.)                                            *
     *                                                                          *
     ***************************************************************************/
-    // cascadeOnDestroy: false,
+    cascadeOnDestroy: false,
 
   },
 
@@ -148,9 +150,9 @@ module.exports = {
     *                                                                          *
     ***************************************************************************/
     cors: {
-      // allowOrigins: [
-      //   'https://example.com',
-      // ]
+      allowOrigins: [
+        'https://example.com',
+      ]
     },
 
   },
@@ -250,10 +252,10 @@ module.exports = {
     * > Be sure to use the right protocol!  ("http://" vs. "https://")         *
     *                                                                          *
     ***************************************************************************/
-     onlyAllowOrigins: [
-       'https://example.com',
-       'https://staging.example.com',
-     ],
+    onlyAllowOrigins: [
+      'https://example.com',
+      'https://staging.example.com',
+    ],
 
 
     /***************************************************************************

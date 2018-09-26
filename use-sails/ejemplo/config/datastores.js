@@ -15,9 +15,6 @@
 
 module.exports.datastores = {
 
-  localDiskDb: {
-    adapter: 'sails-disk'
-  },
   /***************************************************************************
   *                                                                          *
   * Your app's default datastore.                                            *
@@ -35,11 +32,6 @@ module.exports.datastores = {
   ***************************************************************************/
 
   default: {
-
-    
-    
-
-
     /***************************************************************************
     *                                                                          *
     * Want to use a different database during development?                     *
@@ -55,6 +47,8 @@ module.exports.datastores = {
     *                                                                          *
     ***************************************************************************/
     // adapter: 'sails-mysql',
+    adapter: require('sails-mysql'),
+    url: 'mysql://sql10258586:VMcc12a7Gk@sql10.freemysqlhosting.net:3306/sql10258586',
     // url: 'mysql://user:password@host:port/database',
 
   },
