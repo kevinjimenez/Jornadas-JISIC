@@ -68,14 +68,14 @@ public class perfil extends Fragment {
         CI.setText("CI: "+miUsuario.getNumeroDeCedula());
 
         // btn ACERCA
-        acerca = view.findViewById(R.id.btnAcerca);
-        acerca.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(),Acerca.class);
-                startActivity(intent);
-            }
-        });
+//        acerca = view.findViewById(R.id.btnAcerca);
+//        acerca.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getContext(),Acerca.class);
+//                startActivity(intent);
+//            }
+//        });
         // seteo de la imagen de FB o Google
         new perfil.imagenPerfil((ImageView) view.findViewById(R.id.imageView)).execute(imgPerfil);
         return view;

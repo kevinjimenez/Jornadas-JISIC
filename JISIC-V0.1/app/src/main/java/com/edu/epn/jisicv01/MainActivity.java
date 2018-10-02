@@ -73,8 +73,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public Fragment getItem(int position) {
             switch (position){
-                case 0: return Publicidad.newInstance("","");
-                case 1: return InicioSesion.newInstance("","");
+                case 0: return InicioSesion.newInstance("","");
                 default: return null;
 
             }
@@ -83,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 2;
+            return 1;
         }
     }
 }

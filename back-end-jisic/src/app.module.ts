@@ -10,14 +10,17 @@ import { UsuarioModule } from 'Usuario/usuario.module';
     UsuarioModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
-      port: 32790,
-      username: 'admin',
+      host: 'usuarios.mysql.database.azure.com',
+      port: 3306,
+      username: 'kevin@usuarios',
       //dropSchema: true, // borrar la base
-      password: 'root',
+      password: 'Kev-1723',
       database: 'usuarios',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true, // crea las tablas
+      extra:{
+        ssl:true
+      }
     }),
 
   ],

@@ -1,11 +1,14 @@
 package com.edu.epn.jisicv01;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Base64;
@@ -15,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -25,6 +29,7 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
+import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
@@ -51,7 +56,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class InicioSesion extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    private String imagenPorDefecto ="https://api.adorable.io/avatars/199/abott@adorable.png";
     // servidor
+    dialogoAsysc dAsysc;
+    private ProgressDialog progressDialog;
 
     // google
     private final int CODERC=9001;
@@ -105,7 +114,10 @@ public class InicioSesion extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_inicio_sesion, container, false);
         callbackManager = CallbackManager.Factory.create();
+        view.getBackground().setAlpha(10);
+
         loginButton = (LoginButton) view.findViewById(R.id.btnFB);
+
         //loginButton.setReadPermissions("user_friends");
         loginButton.setFragment(this);
         accessTokenTracker = new AccessTokenTracker() {
@@ -156,7 +168,7 @@ public class InicioSesion extends Fragment {
                     if(inputEmail.getText().toString().isEmpty() && inputPassword.getText().toString().isEmpty()){
                         Toast.makeText(getContext(),"Debes llenar los Campos",Toast.LENGTH_LONG).show();
                     }else {
-                        buscarUsuarioPorEmail(inputEmail.getText().toString(),inputPassword.getText().toString(),"");
+                        buscarUsuarioPorEmail(inputEmail.getText().toString(),inputPassword.getText().toString(),imagenPorDefecto+inputEmail.getText().toString());
                     }
                 }
             });
@@ -174,6 +186,7 @@ public class InicioSesion extends Fragment {
 
 
     public void buscarUsuarioPorNombre(String nombreUsuario, final String urlImagen){
+        ejecucuinDeProceesDialog();
         String nombreCompleto[] = new String[]{};
 
         Retrofit retrofits = new Retrofit
@@ -210,6 +223,9 @@ public class InicioSesion extends Fragment {
     }
 
     public void buscarUsuarioPorEmail( final String email, final String password, final String urlImagen){
+        ejecucuinDeProceesDialog();
+
+
         Retrofit retrofits = new Retrofit
                 .Builder()
                 .baseUrl(new DireccionHttpDelServidor().getAPI_BASE_URL())
@@ -255,6 +271,12 @@ public class InicioSesion extends Fragment {
         super.onResume();
         //Profile profile = Profile.getCurrentProfile();
         //logeoConFB(profile);
+        if(accessTokenTracker.isTracking()&&profileTracker.isTracking()) {
+            AppEventsLogger.activateApp(getContext());
+            Profile profile = Profile.getCurrentProfile();
+            logeoConFB(profile);
+
+        }
     }
 
     @Override
@@ -373,5 +395,64 @@ public class InicioSesion extends Fragment {
                 }
         }
         callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void ejecucuinDeProceesDialog(){
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setMessage("Conectando...");
+        progressDialog.setCancelable(true);
+        progressDialog.setMax(100);
+        dAsysc = new dialogoAsysc();
+        dAsysc.execute();
+    }
+
+
+
+    public void tiempoDeEspera(){
+        try {
+
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public class dialogoAsysc extends AsyncTask<Void,Integer,Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            tiempoDeEspera();
+            return true;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+        }
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    dialogoAsysc.this.cancel(true);
+                }
+            });
+            progressDialog.show();
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            if (aBoolean){
+                progressDialog.dismiss();
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+        }
+
+
     }
 }

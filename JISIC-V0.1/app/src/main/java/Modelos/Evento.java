@@ -83,13 +83,13 @@ public class Evento implements Serializable{
 
     public ArrayList<Evento> MisEventos(){
         ArrayList <Evento> eventos = new ArrayList<>();
-        eventos.add(new Evento("Lunes 17","9:00 - 11:00","Bienvenida a las Jornadas","evento 1","cualqiera","cec","200"));
-        eventos.add(new Evento("martes 18","13:00 - 14:00","Jornadas","evento 1","cualqiera 2","cec","200"));
-        eventos.add(new Evento("miercoles 19","8:00 - 11:00","Jornadas","evento 2","cualqiera 3","cec","200"));
-        eventos.add(new Evento("coffee break","11:00 - 11:30","refiegerio","evento 3","cualqiera 4","cec","200"));
-//        eventos.add(new Evento("Lunes 17","9:00 - 11:00","Bienvenida a las Jornadas","evento 1","cualqiera","cec","200"));
-//        eventos.add(new Evento("Lunes 17","9:00 - 11:00","Bienvenida a las Jornadas","evento 1","cualqiera","cec","200"));
-//        eventos.add(new Evento("Lunes 17","9:00 - 11:00","Bienvenida a las Jornadas","evento 1","cualqiera","cec","200"));
+        eventos.add(new Evento("Monday 17","9:00 - 11:00","Bienvenida a las Jornadas","evento 1","cualqiera","cec","200"));
+        eventos.add(new Evento("Tuesday 18","13:00 - 14:00","Jornadas","evento 1","cualqiera 2","cec","200"));
+        eventos.add(new Evento("Wednesday 19","8:00 - 11:00","Jornadas","evento 2","cualqiera 3","cec","200"));
+        eventos.add(new Evento("coffee break","11:00 - 11:30","refrigerio","evento 3","cualqiera 4","cec","200"));
+        eventos.add(new Evento("Monday 17","13:00 - 14:00","Bienvenida a las Jornadas","evento 1","cualqiera","cec","200"));
+        eventos.add(new Evento("Lunes 17","14:00 - 16:00","Bienvenida a las Jornadas","evento 1","cualqiera","cec","200"));
+        eventos.add(new Evento("Lunes 17","16:00 - 18:00","Bienvenida a las Jornadas","evento 1","cualqiera","cec","200"));
 //        eventos.add(new Evento("Lunes 17","9:00 - 11:00","Bienvenida a las Jornadas","evento 1","cualqiera","cec","200"));
 //        eventos.add(new Evento("Lunes 17","9:00 - 11:00","Bienvenida a las Jornadas","evento 1","cualqiera","cec","200"));
 //        eventos.add(new Evento("Lunes 17","9:00 - 11:00","Bienvenida a las Jornadas","evento 1","cualqiera","cec","200"));
