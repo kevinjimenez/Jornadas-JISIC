@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".ticket"
     android:orientation="vertical"
-    android:background="@color/com_facebook_blue"
+    android:background="@mipmap/img"
     >
 
     <!-- TODO: Update blank fragment layout -->

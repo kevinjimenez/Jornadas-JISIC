@@ -127,6 +127,8 @@ public class eventos extends Fragment {
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             String horaInicioYFin [] = new String[]{} ;
+            String diasJornadas [] = new String[]{} ;
+
             view = getLayoutInflater().inflate(R.layout.mi_lista_personalizada,null);
             TextView diaEvento = view.findViewById(R.id.dia);
             TextView horaEvento = view.findViewById(R.id.hora);
@@ -135,17 +137,35 @@ public class eventos extends Fragment {
             diaEvento.setText(misEventos.MisEventos().get(i).getDia());
             horaEvento.setText(misEventos.MisEventos().get(i).getHora());
             nombreEvento.setText(misEventos.MisEventos().get(i).getNombreDelEvento());
+
+            diasJornadas = diaEvento.getText().toString().split("[ ]+");
             horaInicioYFin = horaEvento.getText().toString().split("[ :-]+");
+
+            int diaJisic = Integer.parseInt(diasJornadas[1]);
+
+
             int horaInicio = Integer.parseInt(horaInicioYFin[0]);
+            int minInicio = Integer.parseInt(horaInicioYFin[1]);
+
+
             int horaFin = Integer.parseInt(horaInicioYFin[2]);
-            Log.e("kheee",horaInicioYFin[2]);
+            int minFin = Integer.parseInt(horaInicioYFin[3]);
+
+
+            int dia = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
             int horaActual = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-            int dia = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
-            Log.e("hora::::",horaActual+""+dia);
-            if(horaInicio<=horaActual&&horaFin>=horaActual){
-                view.setBackgroundResource(R.color.com_facebook_blue);
-                view.getBackground().setAlpha(50);
+            int minActual = Calendar.getInstance().get(Calendar.MINUTE);
+
+
+            if (dia == diaJisic){
+
+                if(horaInicio<=horaActual && horaFin>=horaActual){
+                    view.setBackgroundResource(R.color.com_facebook_blue);
+                    view.getBackground().setAlpha(50);
+                }
             }
+
+
             return view;
         }
     }

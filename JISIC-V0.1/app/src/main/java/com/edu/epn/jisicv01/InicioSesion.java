@@ -114,7 +114,8 @@ public class InicioSesion extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_inicio_sesion, container, false);
         callbackManager = CallbackManager.Factory.create();
-        view.getBackground().setAlpha(10);
+        view.getBackground().setAlpha(100);
+
 
         loginButton = (LoginButton) view.findViewById(R.id.btnFB);
 
@@ -184,9 +185,8 @@ public class InicioSesion extends Fragment {
         return view;
     }
 
-
     public void buscarUsuarioPorNombre(String nombreUsuario, final String urlImagen){
-        ejecucuinDeProceesDialog();
+
         String nombreCompleto[] = new String[]{};
 
         Retrofit retrofits = new Retrofit
@@ -201,17 +201,22 @@ public class InicioSesion extends Fragment {
         Call<List<usuario>> call = req.getUsuarioPorNombre(nombreCompleto[0]);
         call.enqueue(new Callback<List<usuario>>() {
             @Override
-            public void onResponse(Call<List<usuario>> call, Response<List<usuario>> response) {
-                if (response.body().size()>0){
 
-                    Intent intent = new Intent(getContext(),Ingresado.class);
-                    intent.putExtra("usuario",(usuario)response.body().get(0));
-                    intent.putExtra("imgPerfil", urlImagen);
-                    Toast.makeText(getContext(),"Bienvenido",Toast.LENGTH_LONG).show();
-                    startActivity(intent);
-                }
-                else {
-                    Toast.makeText(getContext(),"No te encuentras inspcrito",Toast.LENGTH_SHORT).show();
+            public void onResponse(Call<List<usuario>> call, Response<List<usuario>> response) {
+                if(response.isSuccessful()){
+                    if (response.body().size()>0){
+
+                        Intent intent = new Intent(getContext(),Ingresado.class);
+                        intent.putExtra("usuario",(usuario)response.body().get(0));
+                        intent.putExtra("imgPerfil", urlImagen);
+                        Toast.makeText(getContext(),"Bienvenido",Toast.LENGTH_LONG).show();
+                        startActivity(intent);
+                    }
+                    else {
+                        Toast.makeText(getContext(),"No te encuentras inspcrito",Toast.LENGTH_SHORT).show();
+                    }
+                }else {
+                    ejecucuinDeProceesDialog();
                 }
             }
 
@@ -223,7 +228,7 @@ public class InicioSesion extends Fragment {
     }
 
     public void buscarUsuarioPorEmail( final String email, final String password, final String urlImagen){
-        ejecucuinDeProceesDialog();
+
 
 
         Retrofit retrofits = new Retrofit
@@ -238,13 +243,16 @@ public class InicioSesion extends Fragment {
         call.enqueue(new Callback<List<usuario>>() {
             @Override
             public void onResponse(Call<List<usuario>> call, Response<List<usuario>> response) {
-                if (response.body().size()>0){
-                    Intent intent = new Intent(getContext(),Ingresado.class);
-                    intent.putExtra("usuario",(usuario)response.body().get(0));
-                    intent.putExtra("imgPerfil", urlImagen);
-                    startActivity(intent);
-                    Toast.makeText(getContext(),"Bienvenido",Toast.LENGTH_LONG).show();
-
+                if (response.isSuccessful()){
+                    Toast.makeText(getContext(),"lll"+response,Toast.LENGTH_LONG).show();
+                    ejecucuinDeProceesDialog();
+                    if (response.body().size()>0){
+                        Intent intent = new Intent(getContext(),Ingresado.class);
+                        intent.putExtra("usuario",(usuario)response.body().get(0));
+                        intent.putExtra("imgPerfil", urlImagen);
+                        startActivity(intent);
+                        Toast.makeText(getContext(),"Bienvenido",Toast.LENGTH_LONG).show();
+                    }
                 }
                 else {
                     Toast.makeText(getContext(),"No te encuentras inspcrito",Toast.LENGTH_SHORT).show();
@@ -401,8 +409,6 @@ public class InicioSesion extends Fragment {
         progressDialog = new ProgressDialog(getContext());
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setMessage("Conectando...");
-        progressDialog.setCancelable(true);
-        progressDialog.setMax(100);
         dAsysc = new dialogoAsysc();
         dAsysc.execute();
     }
@@ -411,12 +417,12 @@ public class InicioSesion extends Fragment {
 
     public void tiempoDeEspera(){
         try {
-
-            Thread.sleep(3000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
+
 
     public class dialogoAsysc extends AsyncTask<Void,Integer,Boolean> {
 
@@ -427,17 +433,7 @@ public class InicioSesion extends Fragment {
         }
 
         @Override
-        protected void onProgressUpdate(Integer... values) {
-        }
-
-        @Override
         protected void onPreExecute() {
-            progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dialog) {
-                    dialogoAsysc.this.cancel(true);
-                }
-            });
             progressDialog.show();
         }
 
@@ -447,12 +443,5 @@ public class InicioSesion extends Fragment {
                 progressDialog.dismiss();
             }
         }
-
-        @Override
-        protected void onCancelled() {
-            super.onCancelled();
-        }
-
-
     }
 }

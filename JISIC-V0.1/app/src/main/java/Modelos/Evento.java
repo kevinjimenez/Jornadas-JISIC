@@ -86,19 +86,17 @@ public class Evento implements Serializable{
         eventos.add(new Evento("Monday 17","9:00 - 11:00","Bienvenida a las Jornadas","evento 1","cualqiera","cec","200"));
         eventos.add(new Evento("Tuesday 18","13:00 - 14:00","Jornadas","evento 1","cualqiera 2","cec","200"));
         eventos.add(new Evento("Wednesday 19","8:00 - 11:00","Jornadas","evento 2","cualqiera 3","cec","200"));
-        eventos.add(new Evento("coffee break","11:00 - 11:30","refrigerio","evento 3","cualqiera 4","cec","200"));
+        eventos.add(new Evento("coffee 4","11:00 - 11:30","refrigerio","evento 3","cualqiera 4","cec","200"));
         eventos.add(new Evento("Monday 17","13:00 - 14:00","Bienvenida a las Jornadas","evento 1","cualqiera","cec","200"));
-        eventos.add(new Evento("Lunes 17","14:00 - 16:00","Bienvenida a las Jornadas","evento 1","cualqiera","cec","200"));
-        eventos.add(new Evento("Lunes 17","16:00 - 18:00","Bienvenida a las Jornadas","evento 1","cualqiera","cec","200"));
-//        eventos.add(new Evento("Lunes 17","9:00 - 11:00","Bienvenida a las Jornadas","evento 1","cualqiera","cec","200"));
-//        eventos.add(new Evento("Lunes 17","9:00 - 11:00","Bienvenida a las Jornadas","evento 1","cualqiera","cec","200"));
-//        eventos.add(new Evento("Lunes 17","9:00 - 11:00","Bienvenida a las Jornadas","evento 1","cualqiera","cec","200"));
-//        eventos.add(new Evento("Lunes 17","9:00 - 11:00","Bienvenida a las Jornadas","evento 1","cualqiera","cec","200"));
-//        eventos.add(new Evento("Lunes 17","9:00 - 11:00","Bienvenida a las Jornadas","evento 1","cualqiera","cec","200"));
-//        eventos.add(new Evento("Lunes 17","9:00 - 11:00","Bienvenida a las Jornadas","evento 1","cualqiera","cec","200"));
-
-
-
+        eventos.add(new Evento("Monday 17","14:00 - 16:00","Bienvenida a las Jornadas","evento 1","cualqiera","cec","200"));
+        eventos.add(new Evento("Monday 17","16:00 - 18:00","Bienvenida a las Jornadas","evento 1","cualqiera","cec","200"));
+        eventos.add(new Evento("Lunes 2","20:00 - 21:00","Bienvenida a las Jornadas","evento 1","cualqiera","cec","200"));
+        eventos.add(new Evento("Lunes 2","21:00 - 22:00","Bienvenida a las Jornadas","evento 1","cualqiera","cec","200"));
+        eventos.add(new Evento("Lunes 3","11:00 - 13:00","Bienvenida a las Jornadas","evento 1","cualqiera","cec","200"));
+        eventos.add(new Evento("Lunes 3","14:00 - 16:00","Bienvenida a las Jornadas","evento 1","cualqiera","cec","200"));
+        eventos.add(new Evento("Lunes 3","16:00 - 18:00","Bienvenida a las Jornadas","evento 1","cualqiera","cec","200"));
+        eventos.add(new Evento("Lunes 3","20:00 - 22:00","Bienvenida a las Jornadas","evento 1","cualqiera","cec","200"));
+        eventos.add(new Evento("Lunes 3","20:00 - 22:00","Bienvenida a las Jornadas","evento 1","cualqiera","cec","200"));
         return eventos;
     }
 }
