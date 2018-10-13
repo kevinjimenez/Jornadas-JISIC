@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">JISIC</string>
+    <string name="app_name">JISIC 2018</string>
     <string name="action_settings">Salir</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="facebook_app_id">240760179972018</string>
@@ -11,5 +11,5 @@
     <string name="title_activity_ingresado">Ingresado</string>
     <string name="tab_text_1">Perfil</string>
     <string name="tab_text_2">Ticket</string>
-    <string name="tab_text_3">Eventos</string>
+    <string name="tab_text_3">Calendario</string>
 </resources>

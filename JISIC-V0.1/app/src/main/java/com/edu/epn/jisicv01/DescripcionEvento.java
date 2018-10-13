@@ -23,8 +23,9 @@ public class DescripcionEvento extends AppCompatActivity {
         // seteo de la info de cada evento seleccionado
         ((TextView)findViewById(R.id.eventoNombre)).setText(evento.getNombreDelEvento());
         ((TextView)findViewById(R.id.nombreEspositores)).setText(evento.getExpositores());
-        ((TextView)findViewById(R.id.descripcionDelEvento)).setText(evento.getDescripcion());
-        ((TextView)findViewById(R.id.ubucacionDelEvento)).setText(evento.getUbicacion());
+        //((TextView)findViewById(R.id.descripcionDelEvento)).setText(evento.getDescripcion());
+        ((TextView)findViewById(R.id.ubucacionDelEvento)).setText(evento.getUbicacion()+" - "+evento.getAuditorio());
+
 
     }
 }

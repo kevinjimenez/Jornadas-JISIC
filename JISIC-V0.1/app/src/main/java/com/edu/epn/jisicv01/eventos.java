@@ -2,6 +2,7 @@ package com.edu.epn.jisicv01;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -62,6 +63,7 @@ public class eventos extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_eventos, container, false);
+        //view.getBackground().setAlpha(100);
         // seteo de la lista con sus datos por default
         listaEventos = view.findViewById(R.id.listEvents);
 
@@ -143,7 +145,6 @@ public class eventos extends Fragment {
 
             int diaJisic = Integer.parseInt(diasJornadas[1]);
 
-
             int horaInicio = Integer.parseInt(horaInicioYFin[0]);
             int minInicio = Integer.parseInt(horaInicioYFin[1]);
 
@@ -156,16 +157,20 @@ public class eventos extends Fragment {
             int horaActual = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
             int minActual = Calendar.getInstance().get(Calendar.MINUTE);
 
-
             if (dia == diaJisic){
+                diaEvento.setTextColor(Color.RED);
 
                 if(horaInicio<=horaActual && horaFin>=horaActual){
-                    view.setBackgroundResource(R.color.com_facebook_blue);
-                    view.getBackground().setAlpha(50);
+//                    if (minActual>minInicio || minActual<minFin){
+                        view.setBackgroundResource(R.color.com_facebook_blue);
+                        view.getBackground().setAlpha(50);
+//                    }
                 }
+            }else {
+                diaEvento.setTextColor(Color.GRAY);
+                horaEvento.setTextColor(Color.GRAY);
+                nombreEvento.setTextColor(Color.GRAY);
             }
-
-
             return view;
         }
     }

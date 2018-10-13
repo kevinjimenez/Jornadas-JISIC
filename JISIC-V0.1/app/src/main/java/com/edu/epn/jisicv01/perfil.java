@@ -57,7 +57,9 @@ public class perfil extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_perfil, container, false);
+        //view.getBackground().setAlpha(50);
         // datos en los text view
+
         nombres = view.findViewById(R.id.txtNombres);
         nombres.setText("Nombres y Apellidos: "+miUsuario.getNombre_1()+" "+ miUsuario.getApellido_1());
         email = view.findViewById(R.id.txtEmail);

@@ -2,7 +2,6 @@ package com.edu.epn.jisicv01;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -18,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -27,6 +25,8 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.appevents.AppEventsLogger;
@@ -38,6 +38,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -106,7 +109,7 @@ public class InicioSesion extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        shaDeFacebook();
+        //shaDeFacebook();
     }
 
     @Override
@@ -130,8 +133,6 @@ public class InicioSesion extends Fragment {
         profileTracker = new ProfileTracker() {
             @Override
             protected void onCurrentProfileChanged(Profile oldProfile, Profile newProfile) {
-                //nextActivity(newProfile);
-                //logeoConFB(newProfile);
             }
         };
         accessTokenTracker.startTracking();
@@ -141,7 +142,8 @@ public class InicioSesion extends Fragment {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Profile profile = Profile.getCurrentProfile();
-                //Toast.makeText(getActivity(), "Login successful", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), loginResult.getRecentlyGrantedPermissions(), Toast.LENGTH_SHORT).show();
+
                 logeoConFB(profile);
             }
 
@@ -169,7 +171,10 @@ public class InicioSesion extends Fragment {
                     if(inputEmail.getText().toString().isEmpty() && inputPassword.getText().toString().isEmpty()){
                         Toast.makeText(getContext(),"Debes llenar los Campos",Toast.LENGTH_LONG).show();
                     }else {
-                        buscarUsuarioPorEmail(inputEmail.getText().toString(),inputPassword.getText().toString(),imagenPorDefecto+inputEmail.getText().toString());
+                        buscarUsuarioPorEmail(
+                                inputEmail.getText().toString(),
+                                inputPassword.getText().toString(),
+                                imagenPorDefecto+inputEmail.getText().toString());
                     }
                 }
             });
@@ -185,9 +190,7 @@ public class InicioSesion extends Fragment {
         return view;
     }
 
-    public void buscarUsuarioPorNombre(String nombreUsuario, final String urlImagen){
-
-        String nombreCompleto[] = new String[]{};
+    public void findByEmail(String email, final String urlImagen){
 
         Retrofit retrofits = new Retrofit
                 .Builder()
@@ -197,15 +200,13 @@ public class InicioSesion extends Fragment {
                 .build();
 
         RequestInterface req = retrofits.create(RequestInterface.class);
-        nombreCompleto = nombreUsuario.toLowerCase().split(" ");
-        Call<List<usuario>> call = req.getUsuarioPorNombre(nombreCompleto[0]);
+        Call<List<usuario>> call = req.getUsuarioPorEmail(email);
         call.enqueue(new Callback<List<usuario>>() {
             @Override
 
             public void onResponse(Call<List<usuario>> call, Response<List<usuario>> response) {
                 if(response.isSuccessful()){
                     if (response.body().size()>0){
-
                         Intent intent = new Intent(getContext(),Ingresado.class);
                         intent.putExtra("usuario",(usuario)response.body().get(0));
                         intent.putExtra("imgPerfil", urlImagen);
@@ -228,9 +229,7 @@ public class InicioSesion extends Fragment {
     }
 
     public void buscarUsuarioPorEmail( final String email, final String password, final String urlImagen){
-
-
-
+        Log.e("paso::",email+" "+password);
         Retrofit retrofits = new Retrofit
                 .Builder()
                 .baseUrl(new DireccionHttpDelServidor().getAPI_BASE_URL())
@@ -239,24 +238,25 @@ public class InicioSesion extends Fragment {
                 .build();
 
         RequestInterface req = retrofits.create(RequestInterface.class);
-        Call<List<usuario>> call = req.getUsuarioPorEmailYPassword(email,password);
+        Call<List<usuario>> call = req.getUsuarioPorEmail(email);
         call.enqueue(new Callback<List<usuario>>() {
             @Override
             public void onResponse(Call<List<usuario>> call, Response<List<usuario>> response) {
-                if (response.isSuccessful()){
-                    Toast.makeText(getContext(),"lll"+response,Toast.LENGTH_LONG).show();
                     ejecucuinDeProceesDialog();
                     if (response.body().size()>0){
-                        Intent intent = new Intent(getContext(),Ingresado.class);
-                        intent.putExtra("usuario",(usuario)response.body().get(0));
-                        intent.putExtra("imgPerfil", urlImagen);
-                        startActivity(intent);
-                        Toast.makeText(getContext(),"Bienvenido",Toast.LENGTH_LONG).show();
+                        if (response.body().get(0).getPassword().equalsIgnoreCase(password)){
+                            Intent intent = new Intent(getContext(),Ingresado.class);
+                            intent.putExtra("usuario",(usuario)response.body().get(0));
+                            intent.putExtra("imgPerfil", urlImagen);
+                            startActivity(intent);
+                            Toast.makeText(getContext(),"Bienvenido",Toast.LENGTH_LONG).show();
+                        }else {
+                            Toast.makeText(getContext(),"Datos incorrecto",Toast.LENGTH_SHORT).show();
+                        }
                     }
-                }
-                else {
-                    Toast.makeText(getContext(),"No te encuentras inspcrito",Toast.LENGTH_SHORT).show();
-                }
+                     else {
+                        Toast.makeText(getContext(),"No te encuentras inspcrito",Toast.LENGTH_SHORT).show();
+                    }
             }
 
             @Override
@@ -351,32 +351,36 @@ public class InicioSesion extends Fragment {
 
     private void logeoConFB(final Profile profile){
         if(profile != null){
-            buscarUsuarioPorNombre(profile.getFirstName(),profile.getProfilePictureUri(250,250).toString());
+            Log.e("1",profile.getName());
+            Log.e("1",profile.getLinkUri().toString());
+            Log.e("1",profile.getId());
+
+            //buscarUsuarioPorNombre(profile.getFirstName(),profile.getProfilePictureUri(250,250).toString());
         }
     }
 
 
     // sha
 
-    public void shaDeFacebook(){
-        FacebookSdk.sdkInitialize(getContext());
-
-        try {
-            PackageInfo info = getActivity().getPackageManager().getPackageInfo(
-                    "com.edu.epn.jisicv01",
-                    PackageManager.GET_SIGNATURES);
-            Log.e("TAG",info.toString());
-            for (Signature signature : info.signatures) {
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                Log.e("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-            Log.e("TAG", e.toString());
-        } catch (NoSuchAlgorithmException e) {
-            Log.e("TAG", e.toString());
-        }
-    }
+//    public void shaDeFacebook(){
+//        FacebookSdk.sdkInitialize(getContext());
+//
+//        try {
+//            PackageInfo info = getActivity().getPackageManager().getPackageInfo(
+//                    "com.edu.epn.jisicv01",
+//                    PackageManager.GET_SIGNATURES);
+//            Log.e("TAG",info.toString());
+//            for (Signature signature : info.signatures) {
+//                MessageDigest md = MessageDigest.getInstance("SHA");
+//                md.update(signature.toByteArray());
+//                Log.e("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+//            }
+//        } catch (PackageManager.NameNotFoundException e) {
+//            Log.e("TAG", e.toString());
+//        } catch (NoSuchAlgorithmException e) {
+//            Log.e("TAG", e.toString());
+//        }
+//    }
 
     // fin sha
 
@@ -394,7 +398,7 @@ public class InicioSesion extends Fragment {
 
 
                     /*   buscar en el server   */
-                    buscarUsuarioPorNombre(acc.getDisplayName(),acc.getPhotoUrl().toString());
+                    findByEmail(acc.getEmail(),acc.getPhotoUrl().toString());
                     /* fin de buqueda*/
 
                     if (token != null){

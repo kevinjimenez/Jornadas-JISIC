@@ -2,6 +2,7 @@ package com.edu.epn.jisicv01;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -57,7 +58,7 @@ public class ticket extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_ticket, container, false);
-        view.getBackground().setAlpha(100);
+        //view.getBackground().setAlpha(50);
         datosDelCodigoQR = datosGenerarTicket;
         QR = view.findViewById(R.id.ticketCode);
         generarQR(datosDelCodigoQR,QR);
@@ -98,7 +99,7 @@ public class ticket extends Fragment {
             BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
             bitmap = barcodeEncoder.createBitmap(bitMatrix);
             imageView.setImageBitmap(bitmap);
-            imageView.setAlpha(70);
+            imageView.setAlpha(100);
         } catch (WriterException e) {
             e.printStackTrace();
         }

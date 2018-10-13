@@ -5,8 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".splash_screen"
-    android:background="@mipmap/jisic"
+    android:background="#ffff"
 
     >
 
+    <ImageView
+        android:id="@+id/imageView8"
+        android:layout_width="314dp"
+        android:layout_height="380dp"
+        android:layout_centerInParent="true"
+        app:srcCompat="@mipmap/jisic" />
 </RelativeLayout>

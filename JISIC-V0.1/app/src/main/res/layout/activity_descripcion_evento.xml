@@ -5,7 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".DescripcionEvento">
+    tools:context=".DescripcionEvento"
+    android:background="@mipmap/images_2"
+
+
+    >
 
     <TextView
         android:id="@+id/txtExpositores"
@@ -15,9 +19,11 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="40dp"
         android:text="Expositores"
         android:textSize="18sp"
+        android:textStyle="italic|bold"
+        android:textColor="#ccffff"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,44 +37,39 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="52dp"
         android:text="Ubicacion"
         android:textSize="18sp"
+        android:textStyle="italic|bold"
+        android:textColor="#ccffff"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/descripcionDelEvento" />
-
-    <TextView
-        android:id="@+id/txtDesc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Descripcion"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nombreEspositores" />
 
     <TextView
         android:id="@+id/eventoNombre"
-        android:layout_width="368dp"
-        android:layout_height="60dp"
+        android:layout_width="0dp"
+        android:layout_height="135dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:padding="15dp"
         android:text="TextView"
-        android:textSize="18sp"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="8dp" />
+        android:textAlignment="center"
+        android:textColor="#ffff"
+        android:textSize="19sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/nombreEspositores"
-        android:layout_width="368dp"
-        android:layout_height="60dp"
+        android:layout_width="0dp"
+        android:layout_height="51dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
@@ -76,29 +77,17 @@
         android:layout_marginTop="8dp"
         android:padding="15dp"
         android:text="TextView"
+        android:textAlignment="center"
+        android:textColor="#ccffcc"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtExpositores" />
 
     <TextView
-        android:id="@+id/descripcionDelEvento"
-        android:layout_width="355dp"
-        android:layout_height="138dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:padding="15dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtDesc" />
-
-    <TextView
         android:id="@+id/ubucacionDelEvento"
-        android:layout_width="283dp"
-        android:layout_height="45dp"
+        android:layout_width="0dp"
+        android:layout_height="63dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
@@ -107,10 +96,14 @@
         android:layout_marginTop="8dp"
         android:padding="15dp"
         android:text="TextView"
+        android:textAlignment="center"
+        android:textColor="#ffff"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.505"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textUbicacion"
-        app:layout_constraintVertical_bias="0.016" />
+        app:layout_constraintVertical_bias="0.234" />
+
 </android.support.constraint.ConstraintLayout>

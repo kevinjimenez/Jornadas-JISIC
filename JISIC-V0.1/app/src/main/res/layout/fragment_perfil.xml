@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".perfil"
     android:orientation="vertical"
-    android:background="@mipmap/afichejornadassistemas"
+    android:background="@mipmap/img"
     >
 
     <!-- TODO: Update blank fragment layout -->
@@ -23,6 +23,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="C.I"
+        android:textStyle="bold|italic"
+        android:textColor="#ffff"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -38,6 +40,8 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:text="EMAIL"
+        android:textStyle="bold|italic"
+        android:textColor="#ffff"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtNombres" />
@@ -51,6 +55,8 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:text="CELULAR"
+        android:textStyle="bold|italic"
+        android:textColor="#ffff"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtEmail" />
@@ -79,7 +85,9 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="DATOS PERSONALES"
+        android:textStyle="bold|italic"
         android:textSize="18sp"
+        android:textColor="#ccffff"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
@@ -94,6 +102,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="76dp"
         android:text="NOMBRES Y APELLIDOS"
+        android:textStyle="bold|italic"
+        android:textColor="#ffff"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtTitulo" />

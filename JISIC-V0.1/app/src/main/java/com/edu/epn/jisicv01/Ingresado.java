@@ -125,6 +125,7 @@ public class Ingresado extends AppCompatActivity {
         public Fragment getItem(int position) {
             switch (position){
                 case 0: return perfil.newInstance(imgPerfil,miUsuario);
+                //case 1: return ticket.newInstance("ff","");
                 case 1: return ticket.newInstance(miUsuario.getNumeroDeCedula(),"");
                 case 2: return eventos.newInstance(imgPerfil,"");
                 default: return null;
