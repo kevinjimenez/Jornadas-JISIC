@@ -142,8 +142,6 @@ public class InicioSesion extends Fragment {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Profile profile = Profile.getCurrentProfile();
-                Toast.makeText(getActivity(), loginResult.getRecentlyGrantedPermissions(), Toast.LENGTH_SHORT).show();
-
                 logeoConFB(profile);
             }
 
