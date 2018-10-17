@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".DescripcionEvento"
-    android:background="@mipmap/images_2"
+    android:background="@mipmap/large"
 
 
     >

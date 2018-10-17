@@ -37,7 +37,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="28dp"
-        android:text="ASISTENCIA"
+        android:text="ASISTENCIA y COFFEE BREAK"
         android:textSize="24sp"
         android:textStyle="bold"
         android:textColor="#ccffff"

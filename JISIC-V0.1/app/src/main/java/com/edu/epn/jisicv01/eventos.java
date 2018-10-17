@@ -66,7 +66,7 @@ public class eventos extends Fragment {
         //view.getBackground().setAlpha(100);
         // seteo de la lista con sus datos por default
         listaEventos = view.findViewById(R.id.listEvents);
-
+        //view.getBackground().setAlpha(70);
         // lista personalizada
         CustomAdarpter customAdarpter = new CustomAdarpter();
         listaEventos.setAdapter(customAdarpter);
@@ -156,7 +156,8 @@ public class eventos extends Fragment {
             int dia = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
             int horaActual = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
             int minActual = Calendar.getInstance().get(Calendar.MINUTE);
-
+            view.setBackgroundColor(Color.WHITE);
+            view.getBackground().setAlpha(60);
             if (dia == diaJisic){
                 diaEvento.setTextColor(Color.RED);
 
@@ -167,9 +168,9 @@ public class eventos extends Fragment {
 //                    }
                 }
             }else {
-                diaEvento.setTextColor(Color.GRAY);
-                horaEvento.setTextColor(Color.GRAY);
-                nombreEvento.setTextColor(Color.GRAY);
+                diaEvento.setTextColor(Color.WHITE);
+                horaEvento.setTextColor(Color.WHITE);
+                nombreEvento.setTextColor(Color.WHITE);
             }
             return view;
         }

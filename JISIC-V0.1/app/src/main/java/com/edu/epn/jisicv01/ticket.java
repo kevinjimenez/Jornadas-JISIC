@@ -60,8 +60,9 @@ public class ticket extends Fragment {
         View view = inflater.inflate(R.layout.fragment_ticket, container, false);
         //view.getBackground().setAlpha(50);
         datosDelCodigoQR = datosGenerarTicket;
+        Log.e("hla",datosGenerarTicket);
         QR = view.findViewById(R.id.ticketCode);
-        generarQR(datosDelCodigoQR,QR);
+        generarQR("JISIC2018BIG_DATA"+datosDelCodigoQR,QR);
         return view;
     }
 
@@ -99,7 +100,6 @@ public class ticket extends Fragment {
             BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
             bitmap = barcodeEncoder.createBitmap(bitMatrix);
             imageView.setImageBitmap(bitmap);
-            imageView.setAlpha(100);
         } catch (WriterException e) {
             e.printStackTrace();
         }

@@ -14,17 +14,17 @@ import retrofit2.http.Query;
 
 public interface RequestInterface {
     // se obtine una lista de objetos
-    @GET("Usuario")
+    @GET("usuarios")
     Call<List<usuario>> getJSON(@Query("email") String correo);
 
     // busca un usuario y retorna en un arreglo
-    @GET("Usuario")
+    @GET("usuarios")
     Call<List<usuario>> getUsuarioPorNombre(@Query("nombre_1") String nombre);
 
-    @GET("Usuario")
+    @GET("usuarios")
     Call<List<usuario>> getUsuarioPorEmail(@Query("email") String email);
 
-    @GET("Usuario/{id}")
+    @GET("usuarios/{id}")
     Call<usuario> getUsuario(@Path("id") int id);
 
 

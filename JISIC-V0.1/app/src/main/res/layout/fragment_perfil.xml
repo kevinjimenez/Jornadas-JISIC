@@ -14,7 +14,7 @@
 
     <TextView
         android:id="@+id/txtCedula"
-        android:layout_width="296dp"
+        android:layout_width="0dp"
         android:layout_height="33dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
@@ -23,41 +23,46 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="C.I"
-        android:textStyle="bold|italic"
         android:textColor="#ffff"
+        android:textStyle="bold|italic"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtCelular"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/txtEmail"
-        android:layout_width="298dp"
+        android:layout_width="0dp"
         android:layout_height="29dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:text="EMAIL"
-        android:textStyle="bold|italic"
         android:textColor="#ffff"
+        android:textStyle="bold|italic"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtNombres" />
 
     <TextView
         android:id="@+id/txtCelular"
-        android:layout_width="298dp"
+        android:layout_width="0dp"
         android:layout_height="33dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:text="CELULAR"
-        android:textStyle="bold|italic"
         android:textColor="#ffff"
+        android:textStyle="bold|italic"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtEmail" />
 
@@ -94,7 +99,7 @@
 
     <TextView
         android:id="@+id/txtNombres"
-        android:layout_width="298dp"
+        android:layout_width="0dp"
         android:layout_height="31dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
@@ -102,8 +107,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="76dp"
         android:text="NOMBRES Y APELLIDOS"
-        android:textStyle="bold|italic"
         android:textColor="#ffff"
+        android:textStyle="bold|italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtTitulo" />

@@ -126,13 +126,6 @@ public class Evento implements Serializable{
         eventos.add(new Evento("VIERNES 19","17:00 - 20:00","Taller o Curso","Taller o Curso","Ingenieros","Facultad de Ingeniería de Sistemas  N°  20","Laboratorios 3er Piso"));
 
 
-        eventos.add(new Evento("VIERNES 13","8:00 - 8:20","Taller o Curso","evento 3","cualqiera 4","Facultad de Ingeniería de Sistemas  N°  20","Laboratorios 3er Piso"));
-        eventos.add(new Evento("VIERNES 13","8:20 - 9:00","Taller o Curso","evento 3","cualqiera 4","Facultad de Ingeniería de Sistemas  N°  20","Laboratorios 3er Piso"));
-        eventos.add(new Evento("VIERNES 13","9:00 - 9:40","Taller o Curso","evento 3","cualqiera 4","Facultad de Ingeniería de Sistemas  N°  20","Laboratorios 3er Piso"));
-        eventos.add(new Evento("VIERNES 13","9:40 - 10:00","Taller o Curso","evento 3","cualqiera 4","Facultad de Ingeniería de Sistemas  N°  20","Laboratorios 3er Piso"));
-        eventos.add(new Evento("VIERNES 13","10:00 - 10:40","Taller o Curso","evento 3","cualqiera 4","Facultad de Ingeniería de Sistemas  N°  20","Laboratorios 3er Piso"));
-        eventos.add(new Evento("VIERNES 13","10:40 - 11:00","Taller o Curso","evento 3","cualqiera 4","Facultad de Ingeniería de Sistemas  N°  20","Laboratorios 3er Piso"));
-        eventos.add(new Evento("VIERNES 13","11:00 - 12:00","Taller o Curso","evento 3","cualqiera 4","Facultad de Ingeniería de Sistemas  N°  20","Laboratorios 3er Piso"));
         return eventos;
     }
 }
